@@ -18,10 +18,11 @@ export default function QuizPage() {
 
   const currentQuestion = questions[currentIndex];
 
-  const goToNext = () => {
-    setSelected(null);
+  const goToNext = (newScore = score) => {
+  setSelected(null);
+
     if (currentIndex + 1 >= questions.length) {
-      navigate("/result", { state: { score } });
+      navigate("/result", { state: { score: newScore } });
     } else {
       setCurrentIndex((i) => i + 1);
     }
@@ -30,12 +31,19 @@ export default function QuizPage() {
   const timeLeft = useTimer(30, goToNext, currentIndex);
 
   const handleAnswer = (answer: string) => {
-    if (selected) return;
-    setSelected(answer);
-    if (answer === currentQuestion.correctAnswer) {
+  if (selected) return;
+
+  setSelected(answer);
+
+  const isCorrect = answer === currentQuestion.correctAnswer;
+
+    if (isCorrect) {
       setScore((s) => s + 1);
     }
-    setTimeout(goToNext, 1000);
+
+    setTimeout(() => {
+      goToNext(isCorrect ? score + 1 : score);
+    }, 1000);
   };
 
   if (!currentQuestion) return <p className="page">Chargement...</p>;
