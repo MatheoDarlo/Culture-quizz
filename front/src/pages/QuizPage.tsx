@@ -30,38 +30,38 @@ export default function QuizPage() {
   const timeLeft = useTimer(30, goToNext, currentIndex);
 
   const handleAnswer = (answer: string) => {
-    if (selected) return; // déjà répondu
+    if (selected) return;
     setSelected(answer);
     if (answer === currentQuestion.correctAnswer) {
       setScore((s) => s + 1);
     }
-    setTimeout(goToNext, 1000); // laisse voir la couleur 1s avant de passer
+    setTimeout(goToNext, 1000);
   };
 
-  if (!currentQuestion) return <p>Chargement...</p>;
+  if (!currentQuestion) return <p className="page">Chargement...</p>;
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <div style={{ textAlign: "right", fontWeight: "bold" }}>⏱ {timeLeft}s</div>
-      <h2>{currentQuestion.text}</h2>
+    <div className="page">
+      <div className="quiz-timer">⏱ {timeLeft}s</div>
+      <h2 className="quiz-question">{currentQuestion.text}</h2>
       {currentQuestion.answers.map((answer) => {
-        let bgColor = "white";
+        let extraClass = "";
         if (selected) {
-          if (answer === currentQuestion.correctAnswer) bgColor = "lightgreen";
-          else if (answer === selected) bgColor = "salmon";
+          if (answer === currentQuestion.correctAnswer) extraClass = "correct";
+          else if (answer === selected) extraClass = "wrong";
         }
         return (
           <button
             key={answer}
+            className={`answer-button ${extraClass}`}
             onClick={() => handleAnswer(answer)}
             disabled={!!selected}
-            style={{ display: "block", width: "100%", padding: "1rem", margin: "0.5rem 0", backgroundColor: bgColor, color: "black" }}
           >
             {answer}
           </button>
         );
       })}
-      <p>Question {currentIndex + 1} / {questions.length}</p>
+      <p className="quiz-progress">Question {currentIndex + 1} / {questions.length}</p>
     </div>
   );
 }

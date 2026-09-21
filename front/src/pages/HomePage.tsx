@@ -4,10 +4,10 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div onClick={() => navigate("/categories")} style={{ textAlign: "center", padding: "2rem", cursor: "pointer" }}>
-      <img src="/logo.png" alt="Logo Culture Quiz" style={{ width: 120 }} />
-      <h1>Culture Quiz</h1>
-      <p>Clique pour commencer</p>
+    <div className="page home-page" onClick={() => navigate("/categories")}>
+      <img src="/logo.png" alt="Logo Culture Quiz" className="home-logo" />
+      <h1 className="home-title">Culture Quiz</h1>
+      <p className="home-hint">Clique pour commencer</p>
     </div>
   );
 }

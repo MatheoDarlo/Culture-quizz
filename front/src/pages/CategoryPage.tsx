@@ -12,13 +12,13 @@ export default function CategoryPage() {
   }, []);
 
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Choisis une catégorie</h2>
+    <div className="page">
+      <h2 className="category-title">Choisis une catégorie</h2>
       {categories.map((cat) => (
         <button
           key={cat.id}
+          className="category-button"
           onClick={() => navigate(`/quiz/${cat.id}`)}
-          style={{ display: "block", width: "100%", padding: "1rem", margin: "0.5rem 0" }}
         >
           {cat.name}
         </button>
