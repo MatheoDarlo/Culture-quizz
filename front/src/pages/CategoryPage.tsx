@@ -5,11 +5,50 @@ import type { Category } from "../types/quiz";
 
 export default function CategoryPage() {
   const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    getCategories().then(setCategories);
-  }, []);
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+
+    getCategories()
+      .then((data) => {
+        if (!cancelled) setCategories(data);
+      })
+      .catch(() => {
+        if (!cancelled) setError("Impossible de charger les catégories.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [attempt]);
+
+  if (loading) {
+    return (
+      <div className="page">
+        <p className="status-message">Chargement...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page">
+        <p className="status-message">{error}</p>
+        <button className="result-button" onClick={() => setAttempt((a) => a + 1)}>
+          Réessayer
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="page">

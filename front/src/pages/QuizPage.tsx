@@ -7,19 +7,50 @@ import { useTimer } from "../hooks/useTimer";
 export default function QuizPage() {
   const { categoryId } = useParams();
   const navigate = useNavigate();
+
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
 
+  // Gestion loading / erreur
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
+
   useEffect(() => {
-    getQuestionsByCategory(Number(categoryId)).then(setQuestions);
-  }, [categoryId]);
+    let cancelled = false;
+
+    setLoading(true);
+    setError(null);
+
+    getQuestionsByCategory(Number(categoryId))
+      .then((data) => {
+        if (!cancelled) {
+          setQuestions(data);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setError("Impossible de charger les questions.");
+        }
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [categoryId, attempt]);
 
   const currentQuestion = questions[currentIndex];
 
   const goToNext = () => {
     setSelected(null);
+
     if (currentIndex + 1 >= questions.length) {
       navigate("/result", { state: { score } });
     } else {
@@ -31,25 +62,68 @@ export default function QuizPage() {
 
   const handleAnswer = (answer: string) => {
     if (selected) return;
+
     setSelected(answer);
+
     if (answer === currentQuestion.correctAnswer) {
       setScore((s) => s + 1);
     }
+
     setTimeout(goToNext, 1000);
   };
 
-  if (!currentQuestion) return <p className="page">Chargement...</p>;
+  if (loading) {
+    return (
+      <div className="page">
+        <p className="status-message">Chargement des questions...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="page">
+        <p className="status-message">{error}</p>
+
+        <button
+          className="result-button"
+          onClick={() => setAttempt((a) => a + 1)}
+        >
+          Réessayer
+        </button>
+      </div>
+    );
+  }
+
+  if (!currentQuestion) {
+    return (
+      <div className="page">
+        <p className="status-message">
+          Aucune question disponible.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="page">
       <div className="quiz-timer">⏱ {timeLeft}s</div>
-      <h2 className="quiz-question">{currentQuestion.text}</h2>
+
+      <h2 className="quiz-question">
+        {currentQuestion.text}
+      </h2>
+
       {currentQuestion.answers.map((answer) => {
         let extraClass = "";
+
         if (selected) {
-          if (answer === currentQuestion.correctAnswer) extraClass = "correct";
-          else if (answer === selected) extraClass = "wrong";
+          if (answer === currentQuestion.correctAnswer) {
+            extraClass = "correct";
+          } else if (answer === selected) {
+            extraClass = "wrong";
+          }
         }
+
         return (
           <button
             key={answer}
@@ -61,7 +135,10 @@ export default function QuizPage() {
           </button>
         );
       })}
-      <p className="quiz-progress">Question {currentIndex + 1} / {questions.length}</p>
+
+      <p className="quiz-progress">
+        Question {currentIndex + 1} / {questions.length}
+      </p>
     </div>
   );
 }

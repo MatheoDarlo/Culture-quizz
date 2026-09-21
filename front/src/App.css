@@ -9,6 +9,7 @@
 }
 
 /* --- HomePage --- */
+
 .home-page {
   flex: 1;
   display: flex;
@@ -42,6 +43,7 @@
 }
 
 /* --- CategoryPage --- */
+
 .category-title {
   font-size: 1.4rem;
   margin-bottom: 1.5rem;
@@ -66,6 +68,7 @@
 }
 
 /* --- QuizPage --- */
+
 .quiz-timer {
   text-align: right;
   font-weight: 700;
@@ -114,7 +117,16 @@
   font-size: 0.9rem;
 }
 
+/* --- Status messages --- */
+
+.status-message {
+  text-align: center;
+  color: var(--color-text-muted);
+  margin: 2rem 0 1rem;
+}
+
 /* --- ResultPage --- */
+
 .result-page {
   flex: 1;
   display: flex;
@@ -148,4 +160,51 @@
 
 .result-button:hover {
   background-color: var(--color-primary-dark);
+}
+
+/* --- Très petits écrans --- */
+
+@media (max-width: 359px) {
+  .home-title {
+    font-size: 1.7rem;
+  }
+
+  .quiz-question {
+    font-size: 1.05rem;
+  }
+}
+
+/* --- Tablette et plus --- */
+
+@media (min-width: 768px) {
+  .page {
+    max-width: 640px;
+    padding: 2.5rem 2rem;
+  }
+
+  .home-logo {
+    width: 160px;
+    height: 160px;
+  }
+
+  .home-title {
+    font-size: 3rem;
+  }
+
+  .quiz-question {
+    font-size: 1.5rem;
+  }
+
+  .answer-button {
+    font-size: 1.05rem;
+    padding: 1.2rem;
+  }
+}
+
+/* --- Desktop --- */
+
+@media (min-width: 1024px) {
+  .page {
+    max-width: 720px;
+  }
 }
