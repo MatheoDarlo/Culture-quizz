@@ -36,3 +36,4 @@ Route::get('/users/{id}', [ApiUserController::class, 'show']);
 
 
 Route::get('/categories', [CategorieController::class, 'indexApi']);
+Route::get('/categories/{id}/questions', [CategorieController::class, 'questions']);

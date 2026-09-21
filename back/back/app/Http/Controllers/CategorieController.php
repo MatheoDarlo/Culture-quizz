@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Categorie;
+use App\Models\Question;
 use Illuminate\Http\Request;
 
 class CategorieController extends Controller
@@ -94,5 +95,14 @@ class CategorieController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function questions($id)
+    {
+    $categorie = Categorie::findOrFail($id);
+
+    return response()->json(
+        Question::where('categorie', $categorie->categorie)->get()
+    );
     }
 }

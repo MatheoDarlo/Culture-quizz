@@ -22,6 +22,7 @@ class Question extends Model
         'reponse8',
         'reponse9',
         'reponse10',
+        'bonne_reponse',
     ];
 
     /**
