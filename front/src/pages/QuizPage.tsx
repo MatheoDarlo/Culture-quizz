@@ -50,9 +50,8 @@ export default function QuizPage() {
 
   const goToNext = () => {
     setSelected(null);
-
     if (currentIndex + 1 >= questions.length) {
-      navigate("/result", { state: { score } });
+      navigate("/result", { state: { score: newScore } });
     } else {
       setCurrentIndex((i) => i + 1);
     }
@@ -62,13 +61,10 @@ export default function QuizPage() {
 
   const handleAnswer = (answer: string) => {
     if (selected) return;
-
     setSelected(answer);
-
     if (answer === currentQuestion.correctAnswer) {
       setScore((s) => s + 1);
     }
-
     setTimeout(goToNext, 1000);
   };
 
