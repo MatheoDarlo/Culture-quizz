@@ -48,10 +48,14 @@ export default function QuizPage() {
 
   const currentQuestion = questions[currentIndex];
 
-  const goToNext = () => {
+  const goToNext = (finalScore: number = score) => {
     setSelected(null);
     if (currentIndex + 1 >= questions.length) {
+<<<<<<< Updated upstream
       navigate("/result", { state: { score } });
+=======
+      navigate("/result", { state: { score: finalScore } });
+>>>>>>> Stashed changes
     } else {
       setCurrentIndex((i) => i + 1);
     }
@@ -62,10 +66,12 @@ export default function QuizPage() {
   const handleAnswer = (answer: string) => {
     if (selected) return;
     setSelected(answer);
-    if (answer === currentQuestion.correctAnswer) {
-      setScore((s) => s + 1);
-    }
-    setTimeout(goToNext, 1000);
+
+    const isCorrect = answer === currentQuestion.correctAnswer;
+    const updatedScore = isCorrect ? score + 1 : score;
+
+    if (isCorrect) setScore(updatedScore);
+    setTimeout(() => goToNext(updatedScore), 1000);
   };
 
   if (loading) {
