@@ -51,7 +51,7 @@ export default function QuizPage() {
   const goToNext = () => {
     setSelected(null);
     if (currentIndex + 1 >= questions.length) {
-      navigate("/result", { state: { score: newScore } });
+      navigate("/result", { state: { score } });
     } else {
       setCurrentIndex((i) => i + 1);
     }
