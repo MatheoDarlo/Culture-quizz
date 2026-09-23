@@ -1,25 +1,51 @@
 import type { Category, Question } from "../types/quiz";
 
-const MOCK_CATEGORIES: Category[] = [
-  { id: 1, name: "Histoire" },
-  { id: 2, name: "Cinéma" },
-  { id: 3, name: "Sport" },
-];
-
-const MOCK_QUESTIONS: Question[] = Array.from({ length: 10 }, (_, i) => ({
-  id: i + 1,
-  categoryId: 1,
-  text: `Question exemple n°${i + 1} ?`,
-  answers: ["Réponse A", "Réponse B", "Réponse C", "Réponse D"],
-  correctAnswer: "Réponse A",
-}));
+const API_URL = "http://127.0.0.1:8000/api";
 
 export async function getCategories(): Promise<Category[]> {
-  // Plus tard : return fetch("http://localhost:PORT/api/categories").then(r => r.json());
-  return Promise.resolve(MOCK_CATEGORIES);
+  const response = await fetch(`${API_URL}/categories`);
+
+  if (!response.ok) {
+    throw new Error("Erreur lors du chargement des catégories");
+  }
+
+  const data = await response.json();
+
+  return data.map((category: any) => ({
+    id: category.id,
+    name: category.categorie,
+  }));
 }
 
-export async function getQuestionsByCategory(categoryId: number): Promise<Question[]> {
-  // Plus tard : return fetch(`http://localhost:PORT/api/categories/${categoryId}/questions`).then(r => r.json());
-  return Promise.resolve(MOCK_QUESTIONS);
+export async function getQuestionsByCategory(
+  categoryId: number
+): Promise<Question[]> {
+  const response = await fetch(
+    `${API_URL}/categories/${categoryId}/questions`
+  );
+
+  if (!response.ok) {
+    throw new Error("Erreur lors du chargement des questions");
+  }
+
+  const data = await response.json();
+
+  return data.map((question: any) => ({
+    id: question.id,
+    categoryId: question.categorie,
+    text: question.question,
+    answers: [
+      question.reponse1,
+      question.reponse2,
+      question.reponse3,
+      question.reponse4,
+      question.reponse5,
+      question.reponse6,
+      question.reponse7,
+      question.reponse8,
+      question.reponse9,
+      question.reponse10,
+    ],
+    correctAnswer: question.bonne_reponse,
+  }));
 }
