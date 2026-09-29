@@ -17,7 +17,7 @@ export function useTimer(duration: number, onExpire: () => void, resetKey: numbe
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [resetKey]); // se relance à chaque nouvelle question
+  }, [resetKey]); 
 
   return timeLeft;
 }
